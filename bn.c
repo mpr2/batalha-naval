@@ -29,19 +29,28 @@ enum sector_code  //enum para preenchimento dos setores
     SINK_CODE   //nave afundada
 };
 
-const int MD = CORR;  //modo do jogo
+int MD = CORR;  //modo do jogo
 const int ORDER = 5;  //ordem da matriz
 const int D = 0;      //quantidade de destruidores
 const int S = 3;      //quantidade de submarinos
-const int T = 6;      //quantidade de torpedos
+int T = 6;      //quantidade de torpedos
 const int MESSAGE_LENGTH = 200;  //tamanho máximo da mensagem mostrada ao usuário
 
 void check_and_fill(int grid[ORDER][ORDER], int i, int j);
 void place_ship(int grid[ORDER][ORDER], int i, int j, int code);
+int argsOk(int argc, char *argv[]);
+void errorMsg(int x);
+int isNum(char s[]);
 
 int
-main()
+main(int argc, char *argv[])
 {
+    int error = argsOk(argc, argv);
+    if (error != 0)
+    {
+        errorMsg(error);
+        return 0;
+    }
     int grid[ORDER][ORDER]; //matriz que representa os setores do jogo
     int i = 0;      //índices para acesso às posições da matriz
     int j = 0;
@@ -171,6 +180,123 @@ main()
         }
     }
 
+    return 0;
+}
+
+/*
+ * argsOk
+ * ---------
+ * Checa se os argumentos inseridos no programa
+ * estão corretos.
+ * Retorna 0 caso os argumentos estejam corretos
+ * Retorna 1 caso tenha argumentos demais
+ * Retorna 2 caso falte argumentos
+ * Retorna 3 caso os argumentos estejam incorretos
+ * Retorna 4 caso o número de torpedos inserido seja invalido
+ * Retorna 5 caso o modo de jogo seja invalido
+ */
+int argsOk(int argc, char *argv[])
+{
+    if (argc > 5)
+    {
+        return 1;
+    }
+    else if (argc < 5)
+    {
+        return 2;
+    }
+    else if (strcmp("-t", argv[1]) == 0 && strcmp("-m", argv[3]) == 0)
+    {
+        if (isNum(argv[2]) == 0)
+        {
+            T = atoi(argv[2]);
+        }
+        else
+        {
+            return 4;
+        }
+        if (strcmp(argv[4], "PLAY") == 0)
+        {
+            MD = PLAY;
+        }
+        else if (strcmp(argv[4], "CORR") == 0)
+        {
+            MD = CORR;
+        }
+        else
+        {
+            return 5;
+        }
+        return 0;
+    }
+    else if (strcmp("-m", argv[1]) == 0 && strcmp("-t", argv[3]) == 0)
+    {
+        if (isNum(argv[4]) == 0)
+        {
+            T = atoi(argv[4]);
+        }
+        else
+        {
+            return 4;
+        }
+        if (strcmp(argv[2], "PLAY") == 0)
+        {
+            MD = PLAY;
+        }
+        else if (strcmp(argv[2], "CORR") == 0)
+        {
+            MD = CORR;
+        }
+        else
+        {
+            return 5;
+        }
+        return 0;
+    }
+    else
+    {
+        return 3;
+    }
+}
+
+void errorMsg(int x)
+{
+    if (x == 1)
+    {
+        printf("Você inseriu argumentos demais. Utilização correta: ./programa -t X -m PLAY/CORR\n");
+    }
+    else if (x == 2)
+    {
+        printf("Argumentos insuficientes. Utilização correta: ./programa -t X -m PLAY/CORR\n");
+    }
+    else if (x == 3)
+    {
+        printf("Argumentos incorretos. Utilização correta: ./programa -t X -m PLAY/CORR\n");
+    }
+    else if (x == 4)
+    {
+        printf("Numero de torpedos inválido, deve ser um número inteiro positivo.\n");
+    }
+    else if (x == 5)
+    {
+        printf("Modo de jogo invalido, deve ser PLAY ou CORR.\n");
+    }
+    else
+    {
+        printf("Erro desconhecido. (%d)\n", x);
+    }
+}
+
+int isNum(char s[])
+{
+    for (int i = 0; i < S && s[i] != '\0'; i++)
+    {
+        if (!isdigit(s[i]))
+        {
+            return 1;
+        }
+
+    }
     return 0;
 }
 
