@@ -42,7 +42,7 @@ int argsOk(int argc, char *argv[]);
 void errorMsg(int x);
 int isNum(char s[]);
 void showInventory (int d, int s, int t);
-void initOcean (char grid [ORDER][ORDER]);
+void initOcean (int grid[ORDER][ORDER]);
 
 int
 main(int argc, char *argv[])
@@ -65,7 +65,7 @@ main(int argc, char *argv[])
     char message[MESSAGE_LENGTH];   //mensagem a ser apresentada ao usuário
     message[0] = '\0';  //inicializa como string vazia
 
-    void initOcean (grid);
+    initOcean(grid);
 
     //posicionamento de submarinos na matriz
     cont = 0;
@@ -120,13 +120,11 @@ main(int argc, char *argv[])
             printf("\n");
         }
 
-        printf("\n");
         //apresenta na tela mensagem referente à última ação
-        printf("%s\n", message);
+        printf("\n%s\n\n", message);
         message[0] = '\0';
-        printf("\n");
        
-        void showInventory (int d, int s, int t);
+        showInventory(d, s, t);
         
         //apresenta mensagens e sai do loop caso o jogador tenha ganhado ou perdido
         if (s == 0 && t >= 0)
@@ -325,35 +323,17 @@ place_ship(int grid[ORDER][ORDER], int i, int j, int code)
     check_and_fill(grid, i + 1, j);
     check_and_fill(grid, i + 1, j + 1);
 }
-/*
-apresenta os argumentos passados em tempo de lançamento
 
-usuario bem comportado
-*/
-#include <stdio.h>
-#include <stdio_ext.h>
-
-const int Max = 30;
-
-
-int main(int argc, char *argv[])
-{
-    int i;
-   
-   for (i=0;i<argc;i++)
-   printf ("%d\n",argc[i]);
-
-    return 0;
-}
 /*
 void initOcean 
 --------------
 inicia o oceano com espaço (‘ ‘) em todas as posições
 O é uma constante que representa a quantidade de linhas e de colunas do Oceano
 */
-void initOcean (char grid [ORDER][ORDER])
+void initOcean(int grid [ORDER][ORDER])
 {
-    //inicializa matriz com posições livres
+    int i = 0;
+    int j = 0;
     for (i = 0; i < ORDER; i++)
     {
         for (j = 0; j < ORDER; j++)
@@ -362,17 +342,17 @@ void initOcean (char grid [ORDER][ORDER])
         }
     }
 } 
+
 /*
 void showInventory
 ------------------
 apresenta a quantidade dedestruidores, submarinos e torpedos restantes para o jogador;
 */
-void showInventory (int d, int s, int t)
+void showInventory(int d, int s, int t)
 {
- printf("\n");
-        //apresenta a quantidade de naves e torpedos
-        printf("Destruidores: %d\n", d);
-        printf("Submarinos: %d\n", s);
-        printf("Torpedos: %d\n", t);
-        printf("\n");
+    printf("\n");
+    printf("Destruidores: %d\n", d);
+    printf("Submarinos: %d\n", s);
+    printf("Torpedos: %d\n", t);
+    printf("\n");
 }
