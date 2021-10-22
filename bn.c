@@ -208,31 +208,36 @@ int argsOk(int argc, char *argv[])
     }
 }
 
+/*
+    errorMsg
+    --------
+    Apresenta em stderr uma mensagem de erro correspondente ao código x
+*/
 void errorMsg(int x)
 {
     if (x == 1)
     {
-        printf("Você inseriu argumentos demais. Utilização correta: ./programa -t X -m PLAY/CORR\n");
+        fprintf(stderr, "Você inseriu argumentos demais. Utilização correta: ./programa -t X -m PLAY/CORR\n");
     }
     else if (x == 2)
     {
-        printf("Argumentos insuficientes. Utilização correta: ./programa -t X -m PLAY/CORR\n");
+        fprintf(stderr, "Argumentos insuficientes. Utilização correta: ./programa -t X -m PLAY/CORR\n");
     }
     else if (x == 3)
     {
-        printf("Argumentos incorretos. Utilização correta: ./programa -t X -m PLAY/CORR\n");
+        fprintf(stderr, "Argumentos incorretos. Utilização correta: ./programa -t X -m PLAY/CORR\n");
     }
     else if (x == 4)
     {
-        printf("Numero de torpedos inválido, deve ser um número inteiro positivo.\n");
+        fprintf(stderr, "Numero de torpedos inválido, deve ser um número inteiro positivo.\n");
     }
     else if (x == 5)
     {
-        printf("Modo de jogo invalido, deve ser PLAY ou CORR.\n");
+        fprintf(stderr, "Modo de jogo invalido, deve ser PLAY ou CORR.\n");
     }
     else
     {
-        printf("Erro desconhecido. (%d)\n", x);
+        fprintf(stderr, "Erro desconhecido. (%d)\n", x);
     }
 }
 
