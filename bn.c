@@ -36,13 +36,15 @@ const int S = 3;      //quantidade de submarinos
 int T = 6;      //quantidade de torpedos
 const int MESSAGE_LENGTH = 200;  //tamanho máximo da mensagem mostrada ao usuário
 
-void check_and_fill(int grid[ORDER][ORDER], int i, int j);
-void place_ship(int grid[ORDER][ORDER], int i, int j, int code);
 int argsOk(int argc, char *argv[]);
+void check_and_fill(int grid[ORDER][ORDER], int i, int j);
 void errorMsg(int x);
+void initOcean(int grid[ORDER][ORDER]);
 int isNum(char s[]);
-void showInventory (int d, int s, int t);
-void initOcean (int grid[ORDER][ORDER]);
+void place_ship(int grid[ORDER][ORDER], int i, int j, int code);
+void showInventory(int d, int s, int t);
+void showOcean(int grid[ORDER][ORDER]);
+void submarinesIntoOcean(int grid[ORDER][ORDER]);
 
 int
 main(int argc, char *argv[])
@@ -56,7 +58,6 @@ main(int argc, char *argv[])
     int grid[ORDER][ORDER]; //matriz que representa os setores do jogo
     int i = 0;      //índices para acesso às posições da matriz
     int j = 0;
-    int cont = 0;   //contador para controle de loop
     int d = D;      //contador de destruidores
     int s = S;      //contador de submarinos
     int t = T;      //contador de torpedos
@@ -66,19 +67,7 @@ main(int argc, char *argv[])
     message[0] = '\0';  //inicializa como string vazia
 
     initOcean(grid);
-
-    //posicionamento de submarinos na matriz
-    cont = 0;
-    while (cont < S)
-    {
-        i = rand() % ORDER;
-        j = rand() % ORDER;
-        if (grid[i][j] == FREE)
-        {
-            place_ship(grid, i, j, S_CODE);
-            cont++;
-        }
-    }
+    submarinesIntoOcean(grid);
 
     printf("BATALHA NAVAL\n");
     printf("-------------\n");
@@ -86,39 +75,7 @@ main(int argc, char *argv[])
     //loop principal do jogo
     while (1)
     {
-        //escreve a matriz na tela
-        printf("\n   ");
-        for (i = 0; i < ORDER; i++)
-        {
-            printf("%3d ", i + 1);
-        }
-        printf("\n   +");
-        for (i = 0; i < ORDER; i++)
-        {
-            printf("---+");
-        }
-        printf("\n");
-        for (i = 0; i < ORDER; i++)
-        {
-            printf(" %c |", 'A' + i);
-            for (j = 0; j < ORDER; j++)
-            {
-                if (grid[i][j] == S_CODE && MD == CORR)
-                    printf(" S |");
-                else if (grid[i][j] == W_CODE)
-                    printf(" W |");
-                else if (grid[i][j] == SINK_CODE)
-                    printf(" * |");
-                else
-                    printf("   |");
-            }
-            printf("\n   +");
-            for (j = 0; j < ORDER; j++)
-            {
-                printf("---+");
-            }
-            printf("\n");
-        }
+        showOcean(grid);
 
         //apresenta na tela mensagem referente à última ação
         printf("\n%s\n\n", message);
@@ -137,6 +94,7 @@ main(int argc, char *argv[])
             printf("Você perdeu...\n");
             break;
         }
+
         printf("Digite o setor: ");
         //entrada dos caracteres referentes ao setor
         __fpurge(stdin);
@@ -355,4 +313,73 @@ void showInventory(int d, int s, int t)
     printf("Submarinos: %d\n", s);
     printf("Torpedos: %d\n", t);
     printf("\n");
+}
+
+/*
+    showOcean
+    ---------
+    Apresenta o oceano após o lançamento de um torpedo
+    A apresentação é consistente com o modo de jogo indicado em MD
+*/
+void
+showOcean(int grid[ORDER][ORDER])
+{
+    int i = 0;
+    int j = 0;
+    printf("\n   ");
+    for (i = 0; i < ORDER; i++)
+    {
+        printf("%3d ", i + 1);
+    }
+    printf("\n   +");
+    for (i = 0; i < ORDER; i++)
+    {
+        printf("---+");
+    }
+    printf("\n");
+    for (i = 0; i < ORDER; i++)
+    {
+        printf(" %c |", 'A' + i);
+        for (j = 0; j < ORDER; j++)
+        {
+            if (grid[i][j] == S_CODE && MD == CORR)
+                printf(" S |");
+            else if (grid[i][j] == W_CODE)
+                printf(" W |");
+            else if (grid[i][j] == SINK_CODE)
+                printf(" * |");
+            else
+                printf("   |");
+        }
+        printf("\n   +");
+        for (j = 0; j < ORDER; j++)
+        {
+            printf("---+");
+        }
+        printf("\n");
+    }
+}
+
+/*
+    submarinesIntoOcean
+    -------------------
+    Posiciona os sumbarinos no oceano
+    O posicionamento é feito considerando ao menos um espaço vazio entre os sumbmarinos
+*/
+void
+submarinesIntoOcean(int grid[ORDER][ORDER])
+{
+    int cont = 0;
+    int i = 0;
+    int j = 0;
+    while (cont < S)
+    {
+        i = rand() % ORDER;
+        j = rand() % ORDER;
+        if (grid[i][j] == FREE)
+        {
+            place_ship(grid, i, j, S_CODE);
+            cont++;
+        }
+    }
 }
