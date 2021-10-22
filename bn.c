@@ -41,6 +41,8 @@ void place_ship(int grid[ORDER][ORDER], int i, int j, int code);
 int argsOk(int argc, char *argv[]);
 void errorMsg(int x);
 int isNum(char s[]);
+void showInventory (int d, int s, int t);
+void initOcean (char grid [ORDER][ORDER]);
 
 int
 main(int argc, char *argv[])
@@ -63,14 +65,7 @@ main(int argc, char *argv[])
     char message[MESSAGE_LENGTH];   //mensagem a ser apresentada ao usuário
     message[0] = '\0';  //inicializa como string vazia
 
-    //inicializa matriz com posições livres
-    for (i = 0; i < ORDER; i++)
-    {
-        for (j = 0; j < ORDER; j++)
-        {
-            grid[i][j] = FREE;
-        }
-    }
+    void initOcean (grid);
 
     //posicionamento de submarinos na matriz
     cont = 0;
@@ -130,11 +125,9 @@ main(int argc, char *argv[])
         printf("%s\n", message);
         message[0] = '\0';
         printf("\n");
-        //apresenta a quantidade de naves e torpedos
-        printf("Destruidores: %d\n", d);
-        printf("Submarinos: %d\n", s);
-        printf("Torpedos: %d\n", t);
-        printf("\n");
+       
+        void showInventory (int d, int s, int t);
+        
         //apresenta mensagens e sai do loop caso o jogador tenha ganhado ou perdido
         if (s == 0 && t >= 0)
         {
